@@ -2,21 +2,30 @@ import jwt from "jsonwebtoken";
 import { env } from "../config/env";
 
 export function signAccessToken(userId: string) {
-    return jwt.sign(
-        { userId },
-        env.jwtAccessSecret,
-        { expiresIn: env.accessExpire as jwt.SignOptions["expiresIn"] }
-    );
+
+  return jwt.sign(
+    { userId },
+    env.jwtAccessSecret,
+    { expiresIn: env.accessExpire }
+  );
+
 }
 
 export function signRefreshToken(userId: string) {
-    return jwt.sign(
-        { userId },
-        env.jwtRefreshSecret,
-        { expiresIn: env.refreshExpire as jwt.SignOptions["expiresIn"] }
-    );
+
+  return jwt.sign(
+    { userId },
+    env.jwtRefreshSecret,
+    { expiresIn: env.refreshExpire }
+  );
+
 }
 
-export function verifyAccessToken(token: string) {
-    return jwt.verify(token, env.jwtAccessSecret);
+export function verifyRefreshToken(token: string) {
+
+  return jwt.verify(
+    token,
+    env.jwtRefreshSecret
+  ) as { userId: string };
+
 }

@@ -1,6 +1,7 @@
 import { hashPassword, verifyPassword } from "../../utils/hash";
 import { createUser, findUserByEmail } from "./auth.repository";
 import { signAccessToken, signRefreshToken } from "../../utils/jwt";
+import { verifyRefreshToken } from "../../utils/jwt"
 
 export async function registerUser(
     name: string,
@@ -57,4 +58,29 @@ export async function loginUser(
         accessToken,
         refreshToken
     };
+}
+
+
+export async function refreshUser(
+    refreshToken: string
+) {
+
+    const payload =
+    verifyRefreshToken(refreshToken);
+
+    const accessToken =
+        signAccessToken(payload.userId);
+
+    const newRefreshToken =
+        signRefreshToken(payload.userId);
+
+    return {
+        accessToken,
+        refreshToken: newRefreshToken
+    };
+
+}
+
+export function logoutUser() {
+    return true;
 }
