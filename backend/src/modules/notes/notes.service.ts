@@ -25,8 +25,12 @@ export async function createNoteService(userId: string, data: any) {
   });
 }
 
-export async function getNotesService(userId: string, options: any = {}) {
-  const { search, tag, folder, page = 1, limit = 10 } = options;
+export async function getNotesService(
+  userId: string,
+  search?: string,
+  page: number = 1,
+  limit: number = 10
+) {
 
   const query: any = {
     userId,
@@ -40,18 +44,11 @@ export async function getNotesService(userId: string, options: any = {}) {
     };
   }
 
-  if (tag) {
-    query.tags = tag;
-  }
+  return NoteModel.find(query)
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .sort({ createdAt: -1 });
 
-  if (folder) {
-    query.folderId = folder;
-  }
-
-  const skip = (page - 1) * limit;
-
-  // ✅ Now NoteModel is defined!
-  return NoteModel.find(query).skip(skip).limit(limit).sort({ createdAt: -1 });
 }
 
 export async function updateNoteService(id: string, userId: string, data: any) {
