@@ -7,6 +7,16 @@ import {
   deleteNote,
 } from "./notes.controller";
 
+import {
+  getTrash,
+  restoreNote,
+  permanentDelete,
+  archiveNote,
+  unarchiveNote,
+  pinNote,
+  unpinNote,
+} from "./notes.controller";
+
 import { requireAuth } from "../../middleware/auth.middleware";
 
 import { validate } from "../../middleware/validate.middleware";
@@ -22,5 +32,19 @@ router.get("/", requireAuth, getNotes);
 router.patch("/:id", requireAuth, validate(updateNoteSchema), updateNote);
 
 router.delete("/:id", requireAuth, deleteNote);
+
+router.get("/trash", requireAuth, getTrash);
+
+router.post("/:id/restore", requireAuth, restoreNote);
+
+router.delete("/:id/permanent", requireAuth, permanentDelete);
+
+router.patch("/:id/archive", requireAuth, archiveNote);
+
+router.patch("/:id/unarchive", requireAuth, unarchiveNote);
+
+router.patch("/:id/pin", requireAuth, pinNote);
+
+router.patch("/:id/unpin", requireAuth, unpinNote);
 
 export default router;

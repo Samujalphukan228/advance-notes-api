@@ -1,5 +1,12 @@
 import { Response } from "express";
 import { AuthRequest } from "../../types/express";
+import {
+  getTrashService,
+  restoreNoteService,
+  permanentDeleteService,
+  archiveNoteService,
+  pinNoteService,
+} from "./notes.service";
 
 import {
   createNoteService,
@@ -38,4 +45,48 @@ export async function deleteNote(req: AuthRequest, res: Response) {
   res.json({
     success: true,
   });
+}
+
+export async function getTrash(req: AuthRequest, res: Response) {
+  const notes = await getTrashService(req.userId!);
+
+  res.json(notes);
+}
+
+export async function restoreNote(req: AuthRequest, res: Response) {
+  const note = await restoreNoteService(req.params.id, req.userId!);
+
+  res.json(note);
+}
+
+export async function permanentDelete(req: AuthRequest, res: Response) {
+  await permanentDeleteService(req.params.id, req.userId!);
+
+  res.json({
+    success: true,
+  });
+}
+
+export async function archiveNote(req: AuthRequest, res: Response) {
+  const note = await archiveNoteService(req.params.id, req.userId!, true);
+
+  res.json(note);
+}
+
+export async function unarchiveNote(req: AuthRequest, res: Response) {
+  const note = await archiveNoteService(req.params.id, req.userId!, false);
+
+  res.json(note);
+}
+
+export async function pinNote(req: AuthRequest, res: Response) {
+  const note = await pinNoteService(req.params.id, req.userId!, true);
+
+  res.json(note);
+}
+
+export async function unpinNote(req: AuthRequest, res: Response) {
+  const note = await pinNoteService(req.params.id, req.userId!, false);
+
+  res.json(note);
 }
