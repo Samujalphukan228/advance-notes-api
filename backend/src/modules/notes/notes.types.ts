@@ -10,4 +10,4 @@ export interface INote extends Document {
     isPinned: boolean;
     createdAt: Date;
     updatedAt: Date;
-}
+} 

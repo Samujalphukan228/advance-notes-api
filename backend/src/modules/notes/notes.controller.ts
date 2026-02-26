@@ -6,14 +6,15 @@ import {
   permanentDeleteService,
   archiveNoteService,
   pinNoteService,
-} from "./notes.service";
-
-import {
   createNoteService,
   getNotesService,
   updateNoteService,
   deleteNoteService,
+  addTagService,       
+  removeTagService, 
 } from "./notes.service";
+
+
 
 export async function createNote(req: AuthRequest, res: Response) {
   const note = await createNoteService(req.userId!, req.body);
