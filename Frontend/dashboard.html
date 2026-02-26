@@ -1,0 +1,1636 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      :root {
+        --bg: #000;
+        --fg: #fff;
+        --gray1: #111;
+        --gray2: #222;
+        --gray3: #333;
+        --gray4: #666;
+        --gray5: #888;
+        --gray6: #999;
+        --radius: 6px;
+      }
+
+      /* Body */
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Content area */
+.content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Sidebar */
+aside {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+aside::-webkit-scrollbar {
+  display: none;
+}
+
+      body {
+        font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg);
+        color: var(--fg);
+        font-size: 14px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* Header */
+      header {
+        height: 48px;
+        border-bottom: 1px solid var(--gray2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        z-index: 10;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .menu-toggle {
+        display: none;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border: none;
+        background: transparent;
+        color: var(--fg);
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .menu-toggle svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .logo {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 4px;
+      }
+
+      .tab {
+        padding: 6px 12px;
+        color: var(--gray5);
+        text-decoration: none;
+        border-radius: var(--radius);
+        font-size: 14px;
+        transition: all 0.2s;
+      }
+
+      .tab:hover {
+        color: var(--fg);
+      }
+
+      .tab.active {
+        color: var(--fg);
+        background: var(--gray1);
+      }
+
+      button {
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 6px 12px;
+        border-radius: var(--radius);
+        border: 1px solid var(--gray2);
+        background: transparent;
+        color: var(--gray5);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      button:hover {
+        color: var(--fg);
+        border-color: var(--gray3);
+      }
+
+      button.primary {
+        background: var(--fg);
+        color: var(--bg);
+        border-color: var(--fg);
+      }
+
+      button.primary:hover {
+        background: #ccc;
+        border-color: #ccc;
+      }
+
+      /* Layout */
+      .container {
+        display: flex;
+        height: calc(100vh - 48px);
+        position: relative;
+      }
+
+      /* Sidebar */
+      aside {
+        width: 240px;
+        border-right: 1px solid var(--gray2);
+        overflow-y: auto;
+        transition: transform 0.3s ease;
+        background: var(--bg);
+        flex-shrink: 0;
+      }
+
+      aside::-webkit-scrollbar {
+        width: 0;
+      }
+
+      .sidebar-section {
+        padding: 16px 0;
+        border-bottom: 1px solid var(--gray2);
+      }
+
+      .sidebar-header {
+        padding: 0 16px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--gray4);
+      }
+
+      .sidebar-header button {
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        border: none;
+        font-size: 16px;
+        color: var(--gray4);
+        justify-content: center;
+      }
+
+      .sidebar-header button:hover {
+        color: var(--fg);
+        background: var(--gray1);
+      }
+
+      /* Folders */
+      .folder-item {
+        display: flex;
+        align-items: center;
+        padding: 6px 16px;
+        color: var(--gray5);
+        cursor: pointer;
+        transition: all 0.15s;
+        position: relative;
+      }
+
+      .folder-item:hover {
+        color: var(--fg);
+        background: var(--gray1);
+      }
+
+      .folder-item.active {
+        color: var(--fg);
+        background: var(--gray1);
+      }
+
+      .folder-name {
+        flex: 1;
+        font-size: 14px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .folder-actions {
+        display: none;
+        gap: 4px;
+        position: absolute;
+        right: 8px;
+      }
+
+      .folder-item:hover .folder-actions {
+        display: flex;
+      }
+
+      .folder-actions button {
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        border: none;
+        font-size: 12px;
+        justify-content: center;
+        background: var(--gray2);
+      }
+
+      .folder-actions button:hover {
+        background: var(--gray3);
+      }
+
+      /* Quick Filters */
+      .quick-filters {
+        padding: 0 16px;
+      }
+
+      .filter-btn {
+        width: 100%;
+        padding: 6px 12px;
+        margin-bottom: 6px;
+        text-align: left;
+        font-size: 13px;
+        color: var(--gray5);
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+
+      .filter-btn:hover {
+        color: var(--fg);
+        background: var(--gray1);
+      }
+
+      .filter-btn.active {
+        color: var(--fg);
+        background: var(--gray1);
+        border-color: var(--gray2);
+      }
+
+      /* Main */
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        min-width: 0;
+      }
+
+      /* Search Bar */
+      .toolbar {
+        border-bottom: 1px solid var(--gray2);
+      }
+
+      .search-bar {
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .search-input {
+        flex: 1;
+        height: 36px;
+        padding: 0 12px;
+        background: var(--gray1);
+        border: 1px solid var(--gray2);
+        border-radius: var(--radius);
+        color: var(--fg);
+        font-size: 14px;
+        outline: none;
+        transition: all 0.2s;
+      }
+
+      .search-input:focus {
+        border-color: var(--gray3);
+        background: transparent;
+      }
+
+      .filter-toggle {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--gray2);
+        border-radius: var(--radius);
+        background: var(--gray1);
+      }
+
+      .filter-toggle.active {
+        background: var(--fg);
+        color: var(--bg);
+        border-color: var(--fg);
+      }
+
+      /* Filters Panel */
+      .filters-panel {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        border-bottom: 1px solid var(--gray2);
+      }
+
+      .filters-panel.open {
+        max-height: 300px;
+      }
+
+      .filters-content {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .filter-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .filter-select {
+        flex: 1;
+        min-width: 120px;
+        padding: 8px 12px;
+        background: var(--gray1);
+        border: 1px solid var(--gray2);
+        border-radius: var(--radius);
+        color: var(--fg);
+        font-size: 13px;
+        outline: none;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .filter-select:hover {
+        border-color: var(--gray3);
+      }
+
+      .filter-select:focus {
+        border-color: var(--gray3);
+        background: transparent;
+      }
+
+      /* Tag Multi-select */
+      .tag-filter {
+        position: relative;
+      }
+
+      .tag-filter-trigger {
+        width: 100%;
+        padding: 8px 12px;
+        background: var(--gray1);
+        border: 1px solid var(--gray2);
+        border-radius: var(--radius);
+        color: var(--fg);
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .tag-filter-trigger:hover {
+        border-color: var(--gray3);
+      }
+
+      .tag-filter-trigger.active {
+        border-color: var(--gray3);
+      }
+
+      .tag-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin-top: 4px;
+        max-height: 200px;
+        overflow-y: auto;
+        background: var(--gray1);
+        border: 1px solid var(--gray3);
+        border-radius: var(--radius);
+        z-index: 100;
+      }
+
+      .tag-dropdown.open {
+        display: block;
+      }
+
+      .tag-option {
+        padding: 8px 12px;
+        font-size: 13px;
+        color: var(--gray5);
+        cursor: pointer;
+        transition: all 0.15s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .tag-option:hover {
+        color: var(--fg);
+        background: var(--gray2);
+      }
+
+      .tag-option.selected {
+        color: var(--fg);
+        background: var(--gray2);
+      }
+
+      .tag-checkbox {
+        width: 14px;
+        height: 14px;
+        border: 1px solid var(--gray3);
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .tag-option.selected .tag-checkbox {
+        background: var(--fg);
+        border-color: var(--fg);
+      }
+
+      .tag-option.selected .tag-checkbox::after {
+        content: '✓';
+        font-size: 10px;
+        color: var(--bg);
+      }
+
+      /* Active Filters */
+      .active-filters {
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        border-bottom: 1px solid var(--gray2);
+        display: none;
+      }
+
+      .active-filters.show {
+        display: flex;
+      }
+
+      .filter-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        font-size: 12px;
+        background: var(--gray2);
+        border: 1px solid var(--gray3);
+        border-radius: 999px;
+        color: var(--fg);
+      }
+
+      .filter-chip button {
+        width: 14px;
+        height: 14px;
+        padding: 0;
+        border: none;
+        background: transparent;
+        color: var(--gray5);
+        font-size: 10px;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .filter-chip button:hover {
+        color: var(--fg);
+      }
+
+      .clear-filters {
+        padding: 4px 8px;
+        font-size: 12px;
+        color: var(--gray5);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+      }
+
+      .clear-filters:hover {
+        color: var(--fg);
+      }
+
+      /* Content */
+      .content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px;
+      }
+
+      .content::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .content::-webkit-scrollbar-thumb {
+        background: var(--gray2);
+        border-radius: 4px;
+      }
+
+      .section {
+        margin-bottom: 24px;
+      }
+
+      .section-title {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--gray4);
+        margin-bottom: 12px;
+      }
+
+      /* Notes Grid */
+      .notes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 12px;
+      }
+
+      .note-card {
+        padding: 16px;
+        background: var(--gray1);
+        border: 1px solid var(--gray2);
+        border-radius: var(--radius);
+        transition: all 0.2s;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .note-card:hover {
+        border-color: var(--gray3);
+      }
+
+      .note-title {
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: var(--fg);
+        text-decoration: none;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .note-content {
+        font-size: 13px;
+        color: var(--gray5);
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-bottom: 12px;
+      }
+
+      .note-footer {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--gray4);
+        flex-wrap: wrap;
+      }
+
+      .note-actions {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        display: none;
+        gap: 4px;
+      }
+
+      .note-card:hover .note-actions {
+        display: flex;
+      }
+
+      .note-actions button {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        background: var(--bg);
+        justify-content: center;
+      }
+
+      .note-meta {
+        display: inline-flex;
+        padding: 2px 6px;
+        font-size: 11px;
+        border: 1px solid var(--gray2);
+        border-radius: 4px;
+        color: var(--gray5);
+      }
+
+      .note-tag {
+        padding: 2px 8px;
+        font-size: 11px;
+        background: var(--bg);
+        border: 1px solid var(--gray3);
+        border-radius: 999px;
+        color: var(--gray6);
+      }
+
+      .empty {
+        text-align: center;
+        padding: 64px 24px;
+        color: var(--gray4);
+      }
+
+      /* Sidebar Overlay for Mobile */
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 8;
+      }
+
+      .sidebar-overlay.show {
+        display: block;
+      }
+
+      /* FAB - Floating Action Button */
+      .fab {
+        display: none;
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
+        border-radius: 999px;
+        background: var(--fg);
+        color: var(--bg);
+        border: none;
+        box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+        z-index: 7;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+
+      .modal.open {
+        display: flex;
+      }
+
+      .modal-content {
+        background: var(--gray1);
+        border: 1px solid var(--gray2);
+        border-radius: 8px;
+        width: 100%;
+        max-width: 480px;
+        padding: 24px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      .modal h2 {
+        margin-bottom: 4px;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .modal p {
+        color: var(--gray5);
+        font-size: 14px;
+        margin-bottom: 24px;
+      }
+
+      .modal label {
+        display: block;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--gray5);
+        margin-bottom: 8px;
+      }
+
+      .modal input,
+      .modal textarea,
+      .modal select {
+        width: 100%;
+        padding: 8px 12px;
+        background: var(--bg);
+        border: 1px solid var(--gray2);
+        border-radius: var(--radius);
+        color: var(--fg);
+        font-size: 14px;
+        outline: none;
+        margin-bottom: 16px;
+        font-family: inherit;
+      }
+
+      .modal textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .modal input:focus,
+      .modal textarea:focus,
+      .modal select:focus {
+        border-color: var(--gray3);
+      }
+
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      /* Tag selector in modal */
+      .tag-selector {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 8px;
+        background: var(--bg);
+        border: 1px solid var(--gray2);
+        border-radius: var(--radius);
+        margin-bottom: 16px;
+        min-height: 40px;
+      }
+
+      .tag-checkbox-modal {
+        padding: 4px 10px;
+        font-size: 12px;
+        border: 1px solid var(--gray2);
+        border-radius: 999px;
+        color: var(--gray5);
+        cursor: pointer;
+        transition: all 0.15s;
+        background: transparent;
+      }
+
+      .tag-checkbox-modal.selected {
+        background: var(--gray2);
+        color: var(--fg);
+        border-color: var(--gray3);
+      }
+
+      /* Mobile Styles */
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: flex;
+        }
+
+        .tabs {
+          display: none;
+        }
+
+        aside {
+          position: fixed;
+          top: 48px;
+          left: 0;
+          bottom: 0;
+          width: 280px;
+          transform: translateX(-100%);
+          z-index: 9;
+        }
+
+        aside.open {
+          transform: translateX(0);
+        }
+
+        .fab {
+          display: flex;
+        }
+
+        .header-right button:not(.primary) {
+          display: none;
+        }
+
+        .notes-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .filter-row {
+          flex-direction: column;
+        }
+
+        .filter-select {
+          width: 100%;
+        }
+
+        .content {
+          padding: 12px;
+        }
+
+        .search-bar {
+          padding: 12px;
+        }
+
+        .filters-content {
+          padding: 12px;
+        }
+
+        .active-filters {
+          padding: 8px 12px;
+        }
+      }
+
+      /* Toast */
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translate(-50%, 100px);
+        padding: 12px 16px;
+        background: var(--gray1);
+        border: 1px solid var(--gray2);
+        border-radius: var(--radius);
+        color: var(--fg);
+        font-size: 14px;
+        opacity: 0;
+        transition: all 0.3s;
+        z-index: 200;
+      }
+
+      .toast.show {
+        transform: translate(-50%, 0);
+        opacity: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="header-left">
+        <button class="menu-toggle" onclick="toggleSidebar()">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+        <div class="logo">Notes</div>
+        <nav class="tabs">
+          <a href="dashboard.html" class="tab active">All</a>
+          <a href="archive.html" class="tab">Archive</a>
+          <a href="trash.html" class="tab">Trash</a>
+        </nav>
+      </div>
+      <div class="header-right">
+        <button class="primary" onclick="openModal()">
+          <span class="desktop-text">New Note</span>
+          <span class="mobile-text">+</span>
+        </button>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Sidebar Overlay -->
+      <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+      <!-- Sidebar -->
+      <aside id="sidebar">
+        <!-- Quick Filters -->
+        <div class="sidebar-section">
+          <div class="sidebar-header">
+            <span>Quick Filters</span>
+          </div>
+          <div class="quick-filters">
+            <button class="filter-btn" onclick="setQuickFilter('all', this)">
+              All Notes
+            </button>
+            <button class="filter-btn" onclick="setQuickFilter('pinned', this)">
+              Pinned Only
+            </button>
+            <button class="filter-btn" onclick="setQuickFilter('recent', this)">
+              Recent (7 days)
+            </button>
+            <button class="filter-btn" onclick="setQuickFilter('notags', this)">
+              Without Tags
+            </button>
+          </div>
+        </div>
+
+        <!-- Folders -->
+        <div class="sidebar-section">
+          <div class="sidebar-header">
+            <span>Folders</span>
+            <button onclick="openFolderModal()">+</button>
+          </div>
+          <div id="folders"></div>
+        </div>
+
+        <!-- Navigation (Mobile) -->
+        <div class="sidebar-section mobile-only">
+          <div class="sidebar-header">
+            <span>Navigation</span>
+          </div>
+          <div class="quick-filters">
+            <a href="archive.html" class="filter-btn">Archive</a>
+            <a href="trash.html" class="filter-btn">Trash</a>
+            <button class="filter-btn" onclick="logout()">Logout</button>
+          </div>
+        </div>
+      </aside>
+
+      <main>
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <!-- Search Bar -->
+          <div class="search-bar">
+            <input class="search-input" id="search" placeholder="Search..." oninput="debounceSearch()">
+            <button class="filter-toggle" onclick="toggleFilters()" id="filterToggle">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Filters Panel -->
+          <div class="filters-panel" id="filtersPanel">
+            <div class="filters-content">
+              <div class="filter-row">
+                <select class="filter-select" id="folderFilter" onchange="applyFilters()">
+                  <option value="">All Folders</option>
+                </select>
+                <select class="filter-select" id="sortFilter" onchange="applyFilters()">
+                  <option value="newest">Newest</option>
+                  <option value="oldest">Oldest</option>
+                  <option value="title">Title A-Z</option>
+                  <option value="modified">Modified</option>
+                </select>
+              </div>
+              <div class="filter-row">
+                <div class="tag-filter">
+                  <button class="tag-filter-trigger" onclick="toggleTagDropdown()" id="tagTrigger">
+                    <span>Select Tags</span>
+                    <span>▼</span>
+                  </button>
+                  <div class="tag-dropdown" id="tagDropdown"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Filters -->
+          <div class="active-filters" id="activeFilters"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+          <div id="pinnedSection" class="section" style="display:none">
+            <div class="section-title">Pinned</div>
+            <div id="pinnedNotes" class="notes-grid"></div>
+          </div>
+          <div class="section">
+            <div class="section-title" id="sectionTitle">All Notes</div>
+            <div id="notes" class="notes-grid"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- FAB for mobile -->
+    <button class="fab" onclick="openModal()">+</button>
+
+    <!-- Note Modal -->
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <h2>New Note</h2>
+        <p>Create a new note</p>
+        
+        <label>Title</label>
+        <input id="noteTitle" placeholder="Note title">
+        
+        <label>Content</label>
+        <textarea id="noteContent" placeholder="Write something..."></textarea>
+        
+        <label>Folder</label>
+        <select id="noteFolder">
+          <option value="">None</option>
+        </select>
+        
+        <label>Tags</label>
+        <div class="tag-selector" id="noteTags"></div>
+        
+        <div class="modal-footer">
+          <button onclick="closeModal()">Cancel</button>
+          <button class="primary" onclick="createNote()">Create</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Folder Modal -->
+    <div class="modal" id="folderModal">
+      <div class="modal-content">
+        <h2 id="folderTitle">New Folder</h2>
+        <p>Create a new folder for your notes</p>
+        
+        <label>Name</label>
+        <input id="folderName" placeholder="Folder name">
+        <input type="hidden" id="folderId">
+        
+        <div class="modal-footer">
+          <button onclick="closeFolderModal()">Cancel</button>
+          <button class="primary" onclick="saveFolder()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+    <script>
+      let currentPage = 1;
+      const limit = 12;
+      let searchTimer;
+      let folders = [];
+      let tags = [];
+      let allNotes = [];
+      
+      // Filters state
+      let filters = {
+        search: '',
+        folder: '',
+        tags: [],
+        sort: 'newest',
+        quickFilter: null
+      };
+      
+      let selectedNoteTags = [];
+
+      init();
+
+      async function init() {
+        await loadFolders();
+        await loadTags();
+        await loadNotes();
+      }
+
+      // --- MOBILE SIDEBAR ---
+      function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('show');
+      }
+
+      function closeSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.querySelector('.sidebar-overlay');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      }
+
+      // --- FILTERS PANEL ---
+      function toggleFilters() {
+        const panel = document.getElementById('filtersPanel');
+        const toggle = document.getElementById('filterToggle');
+        panel.classList.toggle('open');
+        toggle.classList.toggle('active');
+      }
+
+      // --- QUICK FILTERS ---
+      function setQuickFilter(type, btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        
+        if (filters.quickFilter === type) {
+          filters.quickFilter = null;
+        } else {
+          filters.quickFilter = type;
+          btn.classList.add('active');
+        }
+        
+        currentPage = 1;
+        loadNotes();
+        
+        // Close sidebar on mobile after selection
+        if (window.innerWidth <= 768) {
+          closeSidebar();
+        }
+      }
+
+      // --- FOLDERS ---
+      async function loadFolders() {
+        folders = await apiFetch("/folders");
+        const sidebarDiv = document.getElementById("folders");
+        const filterSelect = document.getElementById("folderFilter");
+        const modalSelect = document.getElementById("noteFolder");
+        
+        sidebarDiv.innerHTML = "";
+        filterSelect.innerHTML = '<option value="">All Folders</option>';
+        modalSelect.innerHTML = '<option value="">None</option>';
+        
+        folders.forEach(f => {
+          sidebarDiv.innerHTML += `
+            <div class="folder-item" onclick="selectFolder('${f._id}')">
+              <span class="folder-name">${f.name}</span>
+              <div class="folder-actions">
+                <button onclick="event.stopPropagation(); editFolder('${f._id}', '${f.name}')">✎</button>
+                <button onclick="event.stopPropagation(); deleteFolder('${f._id}')">×</button>
+              </div>
+            </div>
+          `;
+          filterSelect.innerHTML += `<option value="${f._id}">${f.name}</option>`;
+          modalSelect.innerHTML += `<option value="${f._id}">${f.name}</option>`;
+        });
+      }
+
+      function selectFolder(id) {
+        document.getElementById('folderFilter').value = id;
+        applyFilters();
+        
+        // Close sidebar on mobile after selection
+        if (window.innerWidth <= 768) {
+          closeSidebar();
+        }
+      }
+
+      function openFolderModal() {
+        document.getElementById('folderModal').classList.add('open');
+        document.getElementById('folderName').focus();
+      }
+
+      function closeFolderModal() {
+        document.getElementById('folderModal').classList.remove('open');
+        document.getElementById('folderName').value = '';
+        document.getElementById('folderId').value = '';
+        document.getElementById('folderTitle').textContent = 'New Folder';
+      }
+
+      function editFolder(id, name) {
+        document.getElementById('folderModal').classList.add('open');
+        document.getElementById('folderName').value = name;
+        document.getElementById('folderId').value = id;
+        document.getElementById('folderTitle').textContent = 'Edit Folder';
+        document.getElementById('folderName').focus();
+      }
+
+      async function saveFolder() {
+        const name = document.getElementById('folderName').value.trim();
+        const id = document.getElementById('folderId').value;
+        if (!name) return;
+
+        if (id) {
+          await apiFetch(`/folders/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ name })
+          });
+        } else {
+          await apiFetch('/folders', {
+            method: 'POST',
+            body: JSON.stringify({ name })
+          });
+        }
+
+        closeFolderModal();
+        showToast(id ? 'Folder updated' : 'Folder created');
+        await loadFolders();
+      }
+
+      async function deleteFolder(id) {
+        if (!confirm('Delete this folder?')) return;
+        await apiFetch(`/folders/${id}`, { method: 'DELETE' });
+        showToast('Folder deleted');
+        await loadFolders();
+        if (filters.folder === id) {
+          filters.folder = '';
+          document.getElementById('folderFilter').value = '';
+          loadNotes();
+        }
+      }
+
+      // --- TAGS ---
+      async function loadTags() {
+        tags = await apiFetch("/tags");
+        
+        // Update tag dropdown
+        const dropdown = document.getElementById("tagDropdown");
+        dropdown.innerHTML = "";
+        
+        if (tags.length === 0) {
+          dropdown.innerHTML = '<div style="padding:12px;color:var(--gray4);font-size:13px">No tags yet</div>';
+        } else {
+          tags.forEach(t => {
+            const isSelected = filters.tags.includes(t._id);
+            dropdown.innerHTML += `
+              <div class="tag-option ${isSelected ? 'selected' : ''}" onclick="toggleTagFilter('${t._id}')">
+                <div class="tag-checkbox"></div>
+                ${t.name}
+              </div>
+            `;
+          });
+        }
+
+        // Update modal tag selector
+        updateModalTagSelector();
+        
+        // Update active filters display
+        updateActiveFilters();
+      }
+
+      function toggleTagDropdown() {
+        const dropdown = document.getElementById('tagDropdown');
+        const trigger = document.getElementById('tagTrigger');
+        
+        if (dropdown.classList.contains('open')) {
+          dropdown.classList.remove('open');
+          trigger.classList.remove('active');
+        } else {
+          dropdown.classList.add('open');
+          trigger.classList.add('active');
+        }
+      }
+
+      function toggleTagFilter(tagId) {
+        if (filters.tags.includes(tagId)) {
+          filters.tags = filters.tags.filter(id => id !== tagId);
+        } else {
+          filters.tags.push(tagId);
+        }
+        
+        loadTags();
+        applyFilters();
+      }
+
+      function updateModalTagSelector() {
+        const selector = document.getElementById('noteTags');
+        if (!selector) return;
+        
+        selector.innerHTML = tags.map(t => `
+          <button class="tag-checkbox-modal ${selectedNoteTags.includes(t._id) ? 'selected' : ''}" 
+                  onclick="toggleNoteTag('${t._id}')" type="button">
+            ${t.name}
+          </button>
+        `).join('');
+        
+        if (tags.length === 0) {
+          selector.innerHTML = '<span style="color:var(--gray4);font-size:12px">No tags yet</span>';
+        }
+      }
+
+      function toggleNoteTag(tagId) {
+        if (selectedNoteTags.includes(tagId)) {
+          selectedNoteTags = selectedNoteTags.filter(id => id !== tagId);
+        } else {
+          selectedNoteTags.push(tagId);
+        }
+        updateModalTagSelector();
+      }
+
+      function updateActiveFilters() {
+        const container = document.getElementById('activeFilters');
+        container.innerHTML = '';
+        
+        // Show selected tags
+        if (filters.tags.length > 0) {
+          container.classList.add('show');
+          
+          filters.tags.forEach(tagId => {
+            const tag = tags.find(t => t._id === tagId);
+            if (tag) {
+              container.innerHTML += `
+                <div class="filter-chip">
+                  ${tag.name}
+                  <button onclick="removeTagFilter('${tagId}')">×</button>
+                </div>
+              `;
+            }
+          });
+          
+          container.innerHTML += '<button class="clear-filters" onclick="clearAllFilters()">Clear all</button>';
+        } else {
+          container.classList.remove('show');
+        }
+        
+        // Update trigger text
+        const trigger = document.getElementById('tagTrigger');
+        if (filters.tags.length > 0) {
+          trigger.innerHTML = `<span>${filters.tags.length} selected</span><span>▼</span>`;
+        } else {
+          trigger.innerHTML = '<span>Select Tags</span><span>▼</span>';
+        }
+      }
+
+      function removeTagFilter(tagId) {
+        filters.tags = filters.tags.filter(id => id !== tagId);
+        loadTags();
+        applyFilters();
+      }
+
+      function clearAllFilters() {
+        filters.tags = [];
+        filters.folder = '';
+        filters.search = '';
+        filters.quickFilter = null;
+        
+        document.getElementById('search').value = '';
+        document.getElementById('folderFilter').value = '';
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        
+        loadTags();
+        loadNotes();
+      }
+
+      // --- APPLY FILTERS ---
+      function applyFilters() {
+        filters.folder = document.getElementById('folderFilter').value;
+        filters.sort = document.getElementById('sortFilter').value;
+        currentPage = 1;
+        loadNotes();
+      }
+
+      function debounceSearch() {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+          filters.search = document.getElementById('search').value;
+          currentPage = 1;
+          loadNotes();
+        }, 300);
+      }
+
+      // --- NOTES ---
+      async function loadNotes() {
+        // Build query
+        let url = `/notes?page=${currentPage}&limit=${limit}`;
+        if (filters.search) url += `&search=${encodeURIComponent(filters.search)}`;
+        if (filters.folder) url += `&folder=${filters.folder}`;
+        
+        let notes = await apiFetch(url);
+        
+        // Client-side filtering for multiple tags
+        if (filters.tags.length > 0) {
+          notes = notes.filter(n => {
+            if (!n.tags || n.tags.length === 0) return false;
+            return filters.tags.every(tagId => n.tags.includes(tagId));
+          });
+        }
+        
+        // Quick filters
+        if (filters.quickFilter) {
+          const now = new Date();
+          const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
+          
+          switch(filters.quickFilter) {
+            case 'pinned':
+              notes = notes.filter(n => n.isPinned);
+              break;
+            case 'recent':
+              notes = notes.filter(n => new Date(n.createdAt) > weekAgo);
+              break;
+            case 'notags':
+              notes = notes.filter(n => !n.tags || n.tags.length === 0);
+              break;
+          }
+        }
+        
+        // Sort
+        notes.sort((a, b) => {
+          switch(filters.sort) {
+            case 'oldest':
+              return new Date(a.createdAt) - new Date(b.createdAt);
+            case 'title':
+              return a.title.localeCompare(b.title);
+            case 'modified':
+              return new Date(b.updatedAt) - new Date(a.updatedAt);
+            default:
+              return new Date(b.createdAt) - new Date(a.createdAt);
+          }
+        });
+        
+        allNotes = notes;
+        
+        // Filter for display
+        const pinned = notes.filter(n => n.isPinned && !n.isArchived);
+        const unpinned = notes.filter(n => !n.isPinned && !n.isArchived);
+
+        // Update section title
+        let title = 'All Notes';
+        if (filters.search) title = `Search: "${filters.search}"`;
+        else if (filters.quickFilter === 'pinned') title = 'Pinned Notes';
+        else if (filters.quickFilter === 'recent') title = 'Recent Notes';
+        else if (filters.quickFilter === 'notags') title = 'Untagged Notes';
+        else if (filters.folder) {
+          const folder = folders.find(f => f._id === filters.folder);
+          title = folder ? folder.name : 'All Notes';
+        }
+        document.getElementById('sectionTitle').textContent = title;
+
+        // Pinned section
+        const pinnedSection = document.getElementById('pinnedSection');
+        const pinnedDiv = document.getElementById('pinnedNotes');
+        if (pinned.length > 0 && filters.quickFilter !== 'pinned') {
+          pinnedSection.style.display = 'block';
+          pinnedDiv.innerHTML = pinned.map(n => noteCard(n)).join('');
+        } else {
+          pinnedSection.style.display = 'none';
+        }
+
+        // Main notes
+        const div = document.getElementById('notes');
+        if (unpinned.length === 0 && pinned.length === 0) {
+          div.innerHTML = '<div class="empty">No notes found</div>';
+        } else {
+          div.innerHTML = unpinned.map(n => noteCard(n)).join('');
+        }
+        
+        // Close tag dropdown
+        document.getElementById('tagDropdown').classList.remove('open');
+        document.getElementById('tagTrigger').classList.remove('active');
+      }
+
+      function noteCard(n) {
+        const date = new Date(n.updatedAt).toLocaleDateString();
+        
+        let tagsHtml = '';
+        if (n.tags && n.tags.length > 0) {
+          n.tags.forEach(tagId => {
+            const tag = tags.find(t => t._id === tagId);
+            if (tag) {
+              tagsHtml += `<span class="note-tag">${tag.name}</span>`;
+            }
+          });
+        }
+
+        let folderHtml = '';
+        if (n.folderId) {
+          const folder = folders.find(f => f._id === n.folderId);
+          if (folder) {
+            folderHtml = `<span class="note-meta">${folder.name}</span>`;
+          }
+        }
+
+        return `
+          <div class="note-card" onclick="window.location='note.html?id=${n._id}'">
+            <div class="note-actions">
+              <button onclick="event.stopPropagation(); togglePin('${n._id}')">${n.isPinned ? '📌' : '📍'}</button>
+              <button onclick="event.stopPropagation(); archiveNote('${n._id}')">📦</button>
+              <button onclick="event.stopPropagation(); deleteNote('${n._id}')">🗑</button>
+            </div>
+            <div class="note-title">${n.title}</div>
+            <div class="note-content">${n.content || 'No content'}</div>
+            <div class="note-footer">
+              <span class="note-meta">${date}</span>
+              ${n.isPinned ? '<span class="note-meta">Pinned</span>' : ''}
+              ${folderHtml}
+              ${tagsHtml}
+            </div>
+          </div>
+        `;
+      }
+
+      // --- CREATE NOTE ---
+      function openModal() {
+        document.getElementById('modal').classList.add('open');
+        document.getElementById('noteFolder').value = filters.folder || '';
+        selectedNoteTags = [];
+        updateModalTagSelector();
+        document.getElementById('noteTitle').focus();
+      }
+
+      function closeModal() {
+        document.getElementById('modal').classList.remove('open');
+        document.getElementById('noteTitle').value = '';
+        document.getElementById('noteContent').value = '';
+        selectedNoteTags = [];
+      }
+
+      async function createNote() {
+        const title = document.getElementById('noteTitle').value.trim();
+        const content = document.getElementById('noteContent').value.trim();
+        const folderId = document.getElementById('noteFolder').value;
+        
+        if (!title) return;
+
+        const body = { title, content };
+        if (folderId) body.folderId = folderId;
+
+        const newNote = await apiFetch('/notes', {
+          method: 'POST',
+          body: JSON.stringify(body)
+        });
+
+        for (const tagId of selectedNoteTags) {
+          await apiFetch(`/notes/${newNote._id}/tags`, {
+            method: 'POST',
+            body: JSON.stringify({ tagId })
+          });
+        }
+
+        closeModal();
+        showToast('Note created');
+        loadNotes();
+      }
+
+      // --- ACTIONS ---
+      async function togglePin(id) {
+        const note = allNotes.find(n => n._id === id);
+        const endpoint = note.isPinned ? 'unpin' : 'pin';
+        await apiFetch(`/notes/${id}/${endpoint}`, { method: 'PATCH' });
+        loadNotes();
+      }
+
+      async function archiveNote(id) {
+        await apiFetch(`/notes/${id}/archive`, { method: 'PATCH' });
+        showToast('Note archived');
+        loadNotes();
+      }
+
+      async function deleteNote(id) {
+        await apiFetch(`/notes/${id}`, { method: 'DELETE' });
+        showToast('Note deleted');
+        loadNotes();
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      }
+
+      // Close modals on click outside
+      ['modal', 'folderModal'].forEach(id => {
+        document.getElementById(id).addEventListener('click', function(e) {
+          if (e.target === this) this.classList.remove('open');
+        });
+      });
+
+      // Close tag dropdown on click outside
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.tag-filter')) {
+          document.getElementById('tagDropdown').classList.remove('open');
+          document.getElementById('tagTrigger').classList.remove('active');
+        }
+      });
+
+      // Escape to close
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          ['modal', 'folderModal'].forEach(id => {
+            document.getElementById(id).classList.remove('open');
+          });
+          document.getElementById('tagDropdown').classList.remove('open');
+          document.getElementById('tagTrigger').classList.remove('active');
+          closeSidebar();
+        }
+      });
+
+      async function logout() {
+        await apiFetch('/auth/logout', { method: 'POST' });
+        window.location = 'index.html';
+      }
+
+      // Mobile styles
+      const style = document.createElement('style');
+      style.textContent = `
+        @media (max-width: 768px) {
+          .desktop-text { display: none; }
+          .mobile-text { display: inline; }
+        }
+        @media (min-width: 769px) {
+          .desktop-text { display: inline; }
+          .mobile-text { display: none; }
+          .mobile-only { display: none !important; }
+        }
+      `;
+      document.head.appendChild(style);
+    </script>
+  </body>
+</html>

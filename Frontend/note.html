@@ -1,0 +1,582 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #000;
+        color: #fff;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+      }
+
+
+      /* Body */
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Content area */
+.content {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Sidebar */
+aside {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+aside::-webkit-scrollbar {
+  display: none;
+}
+      .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+        border-bottom: 1px solid #333;
+        position: sticky;
+        top: 0;
+        background: rgba(0,0,0,0.95);
+        backdrop-filter: blur(10px);
+        z-index: 5;
+      }
+
+      .navbar-left { display: flex; align-items: center; gap: 0.75rem; }
+
+      .back-link {
+        color: #666;
+        text-decoration: none;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        transition: color 0.15s ease;
+      }
+
+      .back-link:hover { color: #fff; }
+
+      .separator { color: #333; font-size: 0.875rem; }
+      .navbar h1 { font-size: 0.875rem; font-weight: 600; }
+      .navbar-actions { display: flex; gap: 0.5rem; align-items: center; }
+
+      .btn-primary {
+        padding: 0.5rem 1rem;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: #000;
+        background: #fff;
+        border: 1px solid #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .btn-primary:hover { background: #e6e6e6; border-color: #e6e6e6; }
+      .btn-primary:active { transform: scale(0.98); }
+
+      .btn-secondary {
+        padding: 0.5rem 1rem;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: #fff;
+        background: transparent;
+        border: 1px solid #333;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .btn-secondary:hover { border-color: #555; background: #111; }
+
+      .btn-icon {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.8125rem;
+        color: #666;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .btn-icon:hover { color: #fff; background: #111; border-color: #333; }
+      .btn-icon.active { color: #eab308; }
+
+      /* Layout */
+      .layout { display: flex; min-height: calc(100vh - 53px); }
+
+      .editor { flex: 1; padding: 2rem; max-width: 720px; margin: 0 auto; }
+
+      .sidebar-right {
+        width: 280px;
+        border-left: 1px solid #333;
+        padding: 1.5rem;
+        overflow-y: auto;
+      }
+
+      .field { margin-bottom: 1rem; }
+
+      .field label {
+        display: block;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: #999;
+        margin-bottom: 0.5rem;
+      }
+
+      input, select {
+        width: 100%;
+        padding: 0.75rem 0.875rem;
+        font-family: inherit;
+        font-size: 0.875rem;
+        color: #fff;
+        background: #000;
+        border: 1px solid #333;
+        border-radius: 5px;
+        outline: none;
+        transition: all 0.15s ease;
+      }
+
+      input:hover, select:hover { border-color: #555; }
+      input:focus, select:focus { border-color: #fff; }
+      select option { background: #000; color: #fff; }
+
+      textarea {
+        width: 100%;
+        min-height: 400px;
+        padding: 0.75rem 0.875rem;
+        font-family: inherit;
+        font-size: 0.875rem;
+        color: #fff;
+        background: #000;
+        border: 1px solid #333;
+        border-radius: 5px;
+        outline: none;
+        resize: vertical;
+        line-height: 1.7;
+        transition: all 0.15s ease;
+      }
+
+      textarea:hover { border-color: #555; }
+      textarea:focus { border-color: #fff; }
+
+      /* Sidebar sections */
+      .panel { margin-bottom: 1.5rem; }
+
+      .panel-header {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #666;
+        margin-bottom: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .panel-add {
+        font-size: 0.6875rem;
+        color: #666;
+        background: none;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 0.125rem 0.375rem;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.15s ease;
+      }
+
+      .panel-add:hover { color: #fff; border-color: #555; }
+
+      .status-badges { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+
+      .status-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.625rem;
+        border-radius: 9999px;
+        border: 1px solid #333;
+        color: #999;
+        background: #111;
+      }
+
+      .status-badge.pinned { border-color: #eab308; color: #eab308; }
+      .status-badge.archived { border-color: #3b82f6; color: #3b82f6; }
+
+      .tag-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.25rem 0.625rem;
+        font-size: 0.75rem;
+        border-radius: 9999px;
+        border: 1px solid #333;
+        color: #999;
+        background: #111;
+        margin: 0.125rem;
+      }
+
+      .tag-remove {
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        font-size: 0.625rem;
+        padding: 0;
+        transition: color 0.15s ease;
+      }
+
+      .tag-remove:hover { color: #fff; }
+
+      .tag-select {
+        width: 100%;
+        padding: 0.5rem 0.625rem;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        color: #fff;
+        background: #000;
+        border: 1px solid #333;
+        border-radius: 5px;
+        outline: none;
+        margin-top: 0.5rem;
+      }
+
+      /* Version history */
+      .version-list { display: flex; flex-direction: column; gap: 0.375rem; }
+
+      .version-item {
+        padding: 0.5rem 0.625rem;
+        border: 1px solid #333;
+        border-radius: 5px;
+        font-size: 0.75rem;
+        color: #999;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.15s ease;
+      }
+
+      .version-item:hover { border-color: #555; background: #111; }
+
+      .version-restore {
+        font-family: inherit;
+        font-size: 0.6875rem;
+        color: #666;
+        background: none;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 0.125rem 0.5rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .version-restore:hover { color: #fff; border-color: #555; }
+
+      .empty-text { font-size: 0.75rem; color: #444; }
+
+      .toast {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        padding: 0.75rem 1.25rem;
+        background: #fff;
+        color: #000;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        border-radius: 5px;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 20;
+      }
+
+      .toast.show { transform: translateY(0); opacity: 1; }
+
+      @media (max-width: 768px) {
+        .layout { flex-direction: column; }
+        .sidebar-right { width: 100%; border-left: none; border-top: 1px solid #333; }
+        .navbar { padding: 1rem; }
+        .editor { padding: 1.5rem 1rem; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="navbar">
+      <div class="navbar-left">
+        <a href="dashboard.html" class="back-link">← Dashboard</a>
+        <span class="separator">/</span>
+        <h1>Edit Note</h1>
+      </div>
+      <div class="navbar-actions">
+        <button class="btn-icon" id="pinBtn" onclick="togglePin()" title="Pin">📍</button>
+        <button class="btn-icon" id="archiveBtn" onclick="toggleArchive()" title="Archive">📦</button>
+        <button class="btn-secondary" onclick="deleteNote()">Delete</button>
+        <button class="btn-primary" onclick="save()">Save</button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="editor">
+        <div class="field">
+          <label for="title">Title</label>
+          <input id="title" placeholder="Note title" />
+        </div>
+        <div class="field">
+          <label for="content">Content</label>
+          <textarea id="content" placeholder="Write something..."></textarea>
+        </div>
+      </div>
+
+      <div class="sidebar-right">
+        <!-- Status -->
+        <div class="panel">
+          <div class="panel-header">Status</div>
+          <div class="status-badges" id="statusBadges"></div>
+        </div>
+
+        <!-- Folder -->
+        <div class="panel">
+          <div class="panel-header">Folder</div>
+          <select id="folderSelect" onchange="changeFolder()">
+            <option value="">No folder</option>
+          </select>
+        </div>
+
+        <!-- Tags -->
+        <div class="panel">
+          <div class="panel-header">
+            Tags
+          </div>
+          <div id="noteTags"></div>
+          <select class="tag-select" id="addTagSelect" onchange="addTag()">
+            <option value="">+ Add tag...</option>
+          </select>
+        </div>
+
+        <!-- Version History -->
+        <div class="panel">
+          <div class="panel-header">Version History</div>
+          <div class="version-list" id="versions"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      let note = null;
+      let allFolders = [];
+      let allTags = [];
+
+      init();
+
+      async function init() {
+        allFolders = await apiFetch("/folders");
+        allTags = await apiFetch("/tags");
+        populateFolderSelect();
+        populateTagSelect();
+        await loadNote();
+        await loadVersions();
+      }
+
+      function populateFolderSelect() {
+        const sel = document.getElementById("folderSelect");
+        sel.innerHTML = '<option value="">No folder</option>';
+        allFolders.forEach(f => {
+          sel.innerHTML += `<option value="${f._id}">${f.name}</option>`;
+        });
+      }
+
+      function populateTagSelect() {
+        const sel = document.getElementById("addTagSelect");
+        sel.innerHTML = '<option value="">+ Add tag...</option>';
+        allTags.forEach(t => {
+          sel.innerHTML += `<option value="${t._id}">${t.name}</option>`;
+        });
+      }
+
+      async function loadNote() {
+        const notes = await apiFetch("/notes?limit=999");
+        note = notes.find(n => n._id === id);
+
+        if (!note) {
+          const trash = await apiFetch("/notes/trash");
+          note = trash.find(n => n._id === id);
+        }
+
+        if (!note) { window.location = "dashboard.html"; return; }
+
+        document.getElementById("title").value = note.title;
+        document.getElementById("content").value = note.content || "";
+        document.getElementById("folderSelect").value = note.folderId || "";
+        updateUI();
+      }
+
+      function updateUI() {
+        const pinBtn = document.getElementById("pinBtn");
+        pinBtn.textContent = note.isPinned ? "📌" : "📍";
+        pinBtn.classList.toggle("active", note.isPinned);
+
+        const archiveBtn = document.getElementById("archiveBtn");
+        archiveBtn.textContent = note.isArchived ? "📂" : "📦";
+        archiveBtn.classList.toggle("active", note.isArchived);
+
+        const badges = document.getElementById("statusBadges");
+        badges.innerHTML = "";
+        if (note.isPinned) badges.innerHTML += '<span class="status-badge pinned">Pinned</span>';
+        if (note.isArchived) badges.innerHTML += '<span class="status-badge archived">Archived</span>';
+        if (!note.isPinned && !note.isArchived) badges.innerHTML = '<span class="empty-text">No status</span>';
+
+        renderTags();
+      }
+
+      function renderTags() {
+        const div = document.getElementById("noteTags");
+        div.innerHTML = "";
+
+        if (!note.tags || note.tags.length === 0) {
+          div.innerHTML = '<span class="empty-text">No tags</span>';
+          return;
+        }
+
+        note.tags.forEach(tId => {
+          const tag = allTags.find(t => t._id === tId);
+          if (tag) {
+            div.innerHTML += `
+              <span class="tag-chip">
+                ${tag.name}
+                <button class="tag-remove" onclick="removeTag('${tag._id}')">✕</button>
+              </span>
+            `;
+          }
+        });
+      }
+
+      async function save() {
+        const title = document.getElementById("title").value;
+        const content = document.getElementById("content").value;
+
+        note = await apiFetch(`/notes/${id}`, {
+          method: "PATCH",
+          body: JSON.stringify({ title, content }),
+        });
+
+        updateUI();
+        loadVersions();
+        showToast("Saved successfully");
+      }
+
+      async function togglePin() {
+        const endpoint = note.isPinned ? "unpin" : "pin";
+        note = await apiFetch(`/notes/${id}/${endpoint}`, { method: "PATCH" });
+        updateUI();
+        showToast(note.isPinned ? "Note pinned" : "Note unpinned");
+      }
+
+      async function toggleArchive() {
+        const endpoint = note.isArchived ? "unarchive" : "archive";
+        note = await apiFetch(`/notes/${id}/${endpoint}`, { method: "PATCH" });
+        updateUI();
+        showToast(note.isArchived ? "Note archived" : "Note unarchived");
+      }
+
+      async function changeFolder() {
+        const folderId = document.getElementById("folderSelect").value;
+        note = await apiFetch(`/notes/${id}`, {
+          method: "PATCH",
+          body: JSON.stringify({ folderId: folderId || null }),
+        });
+        showToast("Folder updated");
+      }
+
+      async function addTag() {
+        const sel = document.getElementById("addTagSelect");
+        const tagId = sel.value;
+        if (!tagId) return;
+
+        note = await apiFetch(`/notes/${id}/tags`, {
+          method: "POST",
+          body: JSON.stringify({ tagId }),
+        });
+
+        sel.value = "";
+        updateUI();
+        showToast("Tag added");
+      }
+
+      async function removeTag(tagId) {
+        note = await apiFetch(`/notes/${id}/tags`, {
+          method: "DELETE",
+          body: JSON.stringify({ tagId }),
+        });
+        updateUI();
+        showToast("Tag removed");
+      }
+
+      async function loadVersions() {
+        const versions = await apiFetch(`/versions/${id}`);
+        const div = document.getElementById("versions");
+        div.innerHTML = "";
+
+        if (versions.length === 0) {
+          div.innerHTML = '<span class="empty-text">No previous versions</span>';
+          return;
+        }
+
+        versions.forEach(v => {
+          const date = new Date(v.createdAt).toLocaleString();
+          div.innerHTML += `
+            <div class="version-item">
+              <span>${date}</span>
+              <button class="version-restore" onclick="restoreVersion('${v._id}')">Restore</button>
+            </div>
+          `;
+        });
+      }
+
+      async function restoreVersion(versionId) {
+        if (!confirm("Restore this version? Current content will be saved as a version.")) return;
+        note = await apiFetch(`/versions/restore/${versionId}`, { method: "POST" });
+        document.getElementById("title").value = note.title;
+        document.getElementById("content").value = note.content || "";
+        updateUI();
+        loadVersions();
+        showToast("Version restored");
+      }
+
+      async function deleteNote() {
+        await apiFetch(`/notes/${id}`, { method: "DELETE" });
+        showToast("Moved to trash");
+        setTimeout(() => window.location = "dashboard.html", 500);
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById("toast");
+        toast.textContent = msg;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2000);
+      }
+    </script>
+  </body>
+</html>
