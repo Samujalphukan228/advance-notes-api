@@ -90,3 +90,19 @@ export async function unpinNote(req: AuthRequest, res: Response) {
 
   res.json(note);
 }
+
+export async function addTag(req: AuthRequest, res: Response) {
+  const note = await addTagService(req.params.id, req.userId!, req.body.tagId);
+
+  res.json(note);
+}
+
+export async function removeTag(req: AuthRequest, res: Response) {
+  const note = await removeTagService(
+    req.params.id,
+    req.userId!,
+    req.body.tagId,
+  );
+
+  res.json(note);
+}

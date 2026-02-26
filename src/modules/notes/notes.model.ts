@@ -22,6 +22,13 @@ const noteSchema = new mongoose.Schema<INote>(
       type: mongoose.Types.ObjectId,
     },
 
+    tags: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Tag",
+      },
+    ],
+
     isArchived: {
       type: Boolean,
       default: false,
@@ -39,7 +46,7 @@ const noteSchema = new mongoose.Schema<INote>(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 export const NoteModel = mongoose.model<INote>("Note", noteSchema);

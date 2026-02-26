@@ -13,6 +13,8 @@ import {
   pinNote,
 } from "./notes.repository";
 
+import { addTagToNote, removeTagFromNote } from "./notes.repository";
+
 export async function createNoteService(userId: string, data: any) {
   return createNote({
     ...data,
@@ -20,13 +22,13 @@ export async function createNoteService(userId: string, data: any) {
   });
 }
 
-export async function getNotesService(
-  userId: string,
-  search?: string,
-  page = 1,
-  limit = 10,
-) {
-  const query: any = {};
+export async function getNotesService(userId: string, options: any) {
+  const { search, tag, folder, page = 1, limit = 10 } = options;
+
+  const query: any = {
+    userId,
+    isDeleted: false,
+  };
 
   if (search) {
     query.title = {
@@ -35,14 +37,23 @@ export async function getNotesService(
     };
   }
 
+  if (tag) {
+    query.tags = tag;
+  }
+
+  if (folder) {
+    query.folderId = folder;
+  }
+
   const skip = (page - 1) * limit;
 
-  const notes = await findNotes(userId, query)
-    .skip(skip)
-    .limit(limit)
-    .sort({ createdAt: -1 });
+  return NoteModel.find(query)
 
-  return notes;
+    .skip(skip)
+
+    .limit(limit)
+
+    .sort({ createdAt: -1 });
 }
 
 export async function updateNoteService(id: string, userId: string, data: any) {
@@ -53,71 +64,46 @@ export async function deleteNoteService(id: string, userId: string) {
   return softDeleteNote(id, userId);
 }
 
-
-export async function getTrashService(
-  userId: string
-) {
-
+export async function getTrashService(userId: string) {
   return findTrashNotes(userId);
-
 }
 
-
-
-export async function restoreNoteService(
-  id: string,
-  userId: string
-) {
-
-  return restoreNote(
-    id,
-    userId
-  );
-
+export async function restoreNoteService(id: string, userId: string) {
+  return restoreNote(id, userId);
 }
 
-
-
-export async function permanentDeleteService(
-  id: string,
-  userId: string
-) {
-
-  return permanentDeleteNote(
-    id,
-    userId
-  );
-
+export async function permanentDeleteService(id: string, userId: string) {
+  return permanentDeleteNote(id, userId);
 }
-
-
 
 export async function archiveNoteService(
   id: string,
   userId: string,
-  value: boolean
+  value: boolean,
 ) {
-
-  return archiveNote(
-    id,
-    userId,
-    value
-  );
-
+  return archiveNote(id, userId, value);
 }
-
-
 
 export async function pinNoteService(
   id: string,
   userId: string,
-  value: boolean
+  value: boolean,
 ) {
+  return pinNote(id, userId, value);
+}
 
-  return pinNote(
-    id,
-    userId,
-    value
-  );
+export async function addTagService(
+  noteId: string,
+  userId: string,
+  tagId: string,
+) {
+  return addTagToNote(noteId, userId, tagId);
+}
 
+export async function removeTagService(
+  noteId: string,
+  userId: string,
+  tagId: string,
+) {
+  return removeTagFromNote(noteId, userId, tagId);
 }

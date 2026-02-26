@@ -64,3 +64,39 @@ export async function pinNote(id: string, userId: string, value: boolean) {
     { new: true },
   );
 }
+
+export async function addTagToNote(
+  noteId: string,
+  userId: string,
+  tagId: string,
+) {
+  return NoteModel.findOneAndUpdate(
+    { _id: noteId, userId },
+
+    {
+      $addToSet: {
+        tags: tagId,
+      },
+    },
+
+    { new: true },
+  );
+}
+
+export async function removeTagFromNote(
+  noteId: string,
+  userId: string,
+  tagId: string,
+) {
+  return NoteModel.findOneAndUpdate(
+    { _id: noteId, userId },
+
+    {
+      $pull: {
+        tags: tagId,
+      },
+    },
+
+    { new: true },
+  );
+}

@@ -15,6 +15,8 @@ import {
   unarchiveNote,
   pinNote,
   unpinNote,
+  addTag,
+  removeTag
 } from "./notes.controller";
 
 import { requireAuth } from "../../middleware/auth.middleware";
@@ -46,5 +48,9 @@ router.patch("/:id/unarchive", requireAuth, unarchiveNote);
 router.patch("/:id/pin", requireAuth, pinNote);
 
 router.patch("/:id/unpin", requireAuth, unpinNote);
+
+router.post("/:id/tags", requireAuth, addTag);
+
+router.delete("/:id/tags", requireAuth, removeTag);
 
 export default router;
