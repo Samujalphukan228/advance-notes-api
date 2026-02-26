@@ -8,26 +8,8 @@
   ],
   "routes": [
     {
-      "src": "/.*",
-      "methods": ["OPTIONS"],
-      "dest": "src/index.ts",
-      "headers": {
-        "Access-Control-Allow-Origin": "https://frontend-notes-eight.vercel.app",
-        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,PATCH,OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type,Authorization,Cookie",
-        "Access-Control-Allow-Credentials": "true"
-      },
-      "status": 200
-    },
-    {
-      "src": "/.*",
-      "dest": "src/index.ts",
-      "headers": {
-        "Access-Control-Allow-Origin": "https://frontend-notes-eight.vercel.app",
-        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,PATCH,OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type,Authorization,Cookie",
-        "Access-Control-Allow-Credentials": "true"
-      }
+      "src": "/(.*)",
+      "dest": "src/index.ts"
     }
   ]
 }
