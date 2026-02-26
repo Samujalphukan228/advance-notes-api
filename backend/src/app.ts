@@ -13,54 +13,34 @@ import versionsRoutes from "./modules/versions/versions.routes";
 
 const app = express();
 
-// ✅ Handle preflight first
-app.options("*", (req, res) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://frontend-notes-eight.vercel.app"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, Cookie"
-  );
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Max-Age", "86400");
-  res.status(200).end();
-});
+// ✅ 1. CORS - FIRST (using the cors package properly)
+const corsOptions = {
+  origin: [
+    "https://frontend-notes-eight.vercel.app",
+    "http://127.0.0.1:5500",
+    "http://localhost:5500"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+  maxAge: 86400
+};
 
-// ✅ Apply CORS headers to ALL requests
-app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://frontend-notes-eight.vercel.app"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, Cookie"
-  );
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  next();
-});
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
-// ✅ Helmet after CORS
+// ✅ 2. Helmet AFTER cors
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
   })
 );
 
+// ✅ 3. Body parsers
 app.use(express.json());
 app.use(cookieParser());
 
-// ✅ Connect DB
+// ✅ 4. Connect DB
 app.use(async (req, res, next) => {
   try {
     await connectDB();
@@ -71,14 +51,14 @@ app.use(async (req, res, next) => {
   }
 });
 
-// ✅ Routes
+// ✅ 5. Routes
 app.use("/auth", authRoutes);
 app.use("/notes", notesRoutes);
 app.use("/folders", foldersRoutes);
 app.use("/tags", tagsRoutes);
 app.use("/versions", versionsRoutes);
 
-// ✅ Test routes
+// ✅ 6. Test routes
 app.get("/test", (req, res) => {
   res.json({
     status: "OK",
@@ -89,12 +69,11 @@ app.get("/test", (req, res) => {
 app.get("/db-test", async (req, res) => {
   res.json({
     mongoState: mongoose.connection.readyState,
-    status:
-      mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    status: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
   });
 });
 
-// ✅ Global error handler
+// ✅ 7. Global error handler
 app.use(
   (
     err: any,
@@ -110,4 +89,4 @@ app.use(
   }
 );
 
-export default app;
+export default app;s
