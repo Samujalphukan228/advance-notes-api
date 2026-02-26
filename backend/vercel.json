@@ -2,26 +2,32 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/server.ts",
+      "src": "src/index.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/.*",
       "methods": ["OPTIONS"],
+      "dest": "src/index.ts",
       "headers": {
         "Access-Control-Allow-Origin": "https://frontend-notes-eight.vercel.app",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization, Cookie",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Max-Age": "86400"
+        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,PATCH,OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type,Authorization,Cookie",
+        "Access-Control-Allow-Credentials": "true"
       },
-      "continue": true
+      "status": 200
     },
     {
-      "src": "/(.*)",
-      "dest": "src/server.ts"
+      "src": "/.*",
+      "dest": "src/index.ts",
+      "headers": {
+        "Access-Control-Allow-Origin": "https://frontend-notes-eight.vercel.app",
+        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,PATCH,OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type,Authorization,Cookie",
+        "Access-Control-Allow-Credentials": "true"
+      }
     }
   ]
 }
