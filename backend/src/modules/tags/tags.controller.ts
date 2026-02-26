@@ -8,19 +8,30 @@ import {
 } from "./tags.service";
 
 export async function createTag(req: AuthRequest, res: Response) {
-  const tag = await createTagService(req.userId!, req.body.name);
+
+  const tag = await createTagService(
+    req.userId as string,
+    req.body.name
+  );
 
   res.json(tag);
 }
 
 export async function getTags(req: AuthRequest, res: Response) {
-  const tags = await getTagsService(req.userId!);
+
+  const tags = await getTagsService(
+    req.userId as string
+  );
 
   res.json(tags);
 }
 
 export async function deleteTag(req: AuthRequest, res: Response) {
-  await deleteTagService(req.params.id, req.userId!);
+
+  await deleteTagService(
+    req.params.id as string,
+    req.userId as string
+  );
 
   res.json({
     success: true,
