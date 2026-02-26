@@ -7,6 +7,7 @@ import notesRoutes from "./modules/notes/notes.routes";
 import foldersRoutes from "./modules/folders/folders.routes";
 import tagsRoutes from "./modules/tags/tags.routes";
 import versionsRoutes from "./modules/versions/versions.routes";
+import mongoose from "mongoose";
 
 const app = express();
 
@@ -31,6 +32,11 @@ app.get("/test", (req, res) => {
   status: "OK",
   message: "API working"
  });
+});
+app.get("/db-test", async (req, res) => {
+  res.json({
+    mongoState: mongoose.connection.readyState
+  });
 });
 
 export default app;
