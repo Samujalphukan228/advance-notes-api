@@ -4,7 +4,7 @@ import { INote } from "./notes.types";
 const noteSchema = new mongoose.Schema<INote>(
   {
     userId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,   // ✅ FIXED
       required: true,
       index: true,
     },
@@ -19,12 +19,12 @@ const noteSchema = new mongoose.Schema<INote>(
     },
 
     folderId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,   // ✅ FIXED
     },
 
     tags: [
       {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId, // ✅ FIXED
         ref: "Tag",
       },
     ],
@@ -49,4 +49,5 @@ const noteSchema = new mongoose.Schema<INote>(
   }
 );
 
-export const NoteModel = mongoose.model<INote>("Note", noteSchema);
+export const NoteModel =
+  mongoose.model<INote>("Note", noteSchema);

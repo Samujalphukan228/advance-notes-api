@@ -1,8 +1,8 @@
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 
 export interface IFolder extends Document {
-    userId: string;
-    name: string;
-    createdAt: Date;
-    updatedAt: Date;
+  userId: Types.ObjectId;   // ✅ FIXED
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

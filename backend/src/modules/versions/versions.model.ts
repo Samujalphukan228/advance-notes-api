@@ -4,13 +4,13 @@ import { INoteVersion } from "./versions.types";
 const versionSchema = new mongoose.Schema<INoteVersion>(
   {
     noteId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,   // ✅ FIXED
       required: true,
       index: true,
     },
 
     userId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,   // ✅ FIXED
       required: true,
       index: true,
     },
@@ -26,10 +26,11 @@ const versionSchema = new mongoose.Schema<INoteVersion>(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-export const VersionModel = mongoose.model<INoteVersion>(
-  "Version",
-  versionSchema,
-);
+export const VersionModel =
+  mongoose.model<INoteVersion>(
+    "Version",
+    versionSchema
+  );

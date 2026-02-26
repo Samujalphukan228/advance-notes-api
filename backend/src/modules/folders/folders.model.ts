@@ -4,7 +4,7 @@ import { IFolder } from "./folders.types";
 const folderSchema = new mongoose.Schema<IFolder>(
   {
     userId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
       index: true,
     },
@@ -16,7 +16,8 @@ const folderSchema = new mongoose.Schema<IFolder>(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-export const FolderModel = mongoose.model<IFolder>("Folder", folderSchema);
+export const FolderModel =
+  mongoose.model<IFolder>("Folder", folderSchema);

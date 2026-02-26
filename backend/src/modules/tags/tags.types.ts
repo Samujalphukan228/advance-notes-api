@@ -1,7 +1,8 @@
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 
 export interface ITag extends Document {
-  userId: string;
+
+  userId: Types.ObjectId;   // ✅ FIXED
 
   name: string;
 

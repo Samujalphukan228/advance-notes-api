@@ -4,7 +4,7 @@ import { ITag } from "./tags.types";
 const tagSchema = new mongoose.Schema<ITag>(
   {
     userId: {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,   // ✅ FIXED
       required: true,
       index: true,
     },
@@ -16,7 +16,8 @@ const tagSchema = new mongoose.Schema<ITag>(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-export const TagModel = mongoose.model<ITag>("Tag", tagSchema);
+export const TagModel =
+  mongoose.model<ITag>("Tag", tagSchema);

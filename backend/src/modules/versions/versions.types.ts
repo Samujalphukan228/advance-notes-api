@@ -1,13 +1,16 @@
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 
 export interface INoteVersion extends Document {
-  noteId: string;
 
-  userId: string;
+  noteId: Types.ObjectId;   // ✅ FIXED
+
+  userId: Types.ObjectId;   // ✅ FIXED
 
   title: string;
 
   content?: string;
 
   createdAt: Date;
+
+  updatedAt: Date;          // ✅ ADD (timestamps require it)
 }
