@@ -6,6 +6,7 @@ import authRoutes from "./modules/auth/auth.routes"
 import notesRoutes from "./modules/notes/notes.routes"
 import foldersRoutes from "./modules/folders/folders.routes";
 import tagsRoutes from "./modules/tags/tags.routes";
+import versionsRoutes from "./modules/versions/versions.routes";
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use("/auth", authRoutes);
 app.use("/notes", notesRoutes);
 app.use("/folders", foldersRoutes);
 app.use("/tags", tagsRoutes);
+app.use("/versions", versionsRoutes);
 
 
 export default app;

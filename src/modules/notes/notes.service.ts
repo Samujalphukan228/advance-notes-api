@@ -14,6 +14,8 @@ import {
 } from "./notes.repository";
 
 import { addTagToNote, removeTagFromNote } from "./notes.repository";
+import { findNoteById } from "./notes.repository";
+import { saveVersionService } from "../versions/versions.service";
 
 export async function createNoteService(userId: string, data: any) {
   return createNote({
@@ -57,6 +59,14 @@ export async function getNotesService(userId: string, options: any) {
 }
 
 export async function updateNoteService(id: string, userId: string, data: any) {
+  const note = await findNoteById(id, userId);
+
+  if (!note) {
+    throw new Error("Note not found");
+  }
+
+  await saveVersionService(note, userId);
+
   return updateNote(id, userId, data);
 }
 
