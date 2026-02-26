@@ -2,28 +2,21 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-function required(key: string): string {
-    const value = process.env[key];
-
-    if (!value) {
-        throw new Error(`Missing env variable ${key}`);
-    }
-
-    return value;
-}
-
 export const env = {
-    port: Number(process.env.PORT) || 5000,
+  port: Number(process.env.PORT) || 5000,
 
-    mongoUri: required("MONGO_URI"),
+  mongoUri: process.env.MONGO_URI as string,
 
-    jwtAccessSecret: required("JWT_ACCESS_SECRET"),
-    jwtRefreshSecret: required("JWT_REFRESH_SECRET"),
+  jwtAccessSecret: process.env.JWT_ACCESS_SECRET as string,
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET as string,
 
-    accessExpire: required("ACCESS_TOKEN_EXPIRES"),
-    refreshExpire: required("REFRESH_TOKEN_EXPIRES"),
+  accessExpire: process.env.ACCESS_TOKEN_EXPIRES || "15m",
+  refreshExpire: process.env.REFRESH_TOKEN_EXPIRES || "30d",
 
-    nodeEnv: process.env.NODE_ENV || "development",
+  nodeEnv: process.env.NODE_ENV || "development",
 
-    cookieDomain: process.env.COOKIE_DOMAIN || "localhost"
+  cookieDomain:
+    process.env.NODE_ENV === "production"
+      ? ".vercel.app"
+      : "localhost"
 };
