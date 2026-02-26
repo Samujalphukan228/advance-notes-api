@@ -18,7 +18,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use(cookieParser();
+app.use(cookieParser()); // FIXED
 
 app.use("/auth", authRoutes);
 app.use("/notes", notesRoutes);
@@ -26,14 +26,11 @@ app.use("/folders", foldersRoutes);
 app.use("/tags", tagsRoutes);
 app.use("/versions", versionsRoutes);
 
-
-/* TEST ROUTE */
 app.get("/test", (req, res) => {
-  res.json({
-    status: "OK",
-    message: "API working",
-    time: new Date()
-  });
+ res.json({
+  status: "OK",
+  message: "API working"
+ });
 });
 
 export default app;
