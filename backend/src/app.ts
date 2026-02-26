@@ -35,13 +35,6 @@ app.use("/folders", foldersRoutes);
 app.use("/tags", tagsRoutes);
 app.use("/versions", versionsRoutes);
 
-// ✅ FIXED 404 HANDLER
-app.use((req, res) => {
-  res.status(404).json({ 
-    error: "Route not found",
-    path: req.originalUrl,
-    method: req.method 
-  });
-});
+// ❌ REMOVE THE 404 HANDLER - Vercel doesn't like it
 
 export default app;
