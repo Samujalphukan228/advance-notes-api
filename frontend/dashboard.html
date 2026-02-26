@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <h1>Dashboard</h1>
+
+    <button onclick="createNote()">New Note</button>
+
+    <button onclick="logout()">Logout</button>
+
+    <div id="notes"></div>
+
+    <script src="app.js"></script>
+
+    <script>
+      loadNotes();
+
+      async function loadNotes() {
+        const notes = await apiFetch("/notes");
+
+        const div = document.getElementById("notes");
+
+        div.innerHTML = "";
+
+        notes.forEach((n) => {
+          div.innerHTML += `
+
+  <div class="note">
+
+  <a href="note.html?id=${n._id}">
+
+  ${n.title}
+
+  </a>
+
+  </div>
+
+  `;
+        });
+      }
+
+      async function createNote() {
+        await apiFetch("/notes", {
+          method: "POST",
+
+          body: JSON.stringify({
+            title: "New Note",
+          }),
+        });
+
+        loadNotes();
+      }
+
+      async function logout() {
+        await apiFetch("/auth/logout", {
+          method: "POST",
+        });
+
+        window.location = "index.html";
+      }
+    </script>
+  </body>
+</html>

@@ -1,3 +1,24 @@
+// import { Response } from "express";
+
+// export function setAuthCookies(
+//     res: Response,
+//     accessToken: string,
+//     refreshToken: string
+// ) {
+//     res.cookie("accessToken", accessToken, {
+//         httpOnly: true,
+//         secure: false,
+//         sameSite: "lax"
+//     });
+
+//     res.cookie("refreshToken", refreshToken, {
+//         httpOnly: true,
+//         secure: false,
+//         sameSite: "lax"
+//     });
+// }
+
+
 import { Response } from "express";
 
 export function setAuthCookies(
@@ -5,15 +26,29 @@ export function setAuthCookies(
     accessToken: string,
     refreshToken: string
 ) {
+
     res.cookie("accessToken", accessToken, {
+
         httpOnly: true,
+
         secure: false,
-        sameSite: "lax"
+
+        sameSite: "lax",
+
+        path: "/"
+
     });
 
     res.cookie("refreshToken", refreshToken, {
+
         httpOnly: true,
+
         secure: false,
-        sameSite: "lax"
+
+        sameSite: "lax",
+
+        path: "/"
+
     });
+
 }

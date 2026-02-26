@@ -3,19 +3,20 @@ import {
   findNotes,
   updateNote,
   softDeleteNote,
-} from "./notes.repository";
-
-import {
   findTrashNotes,
   restoreNote,
   permanentDeleteNote,
   archiveNote,
   pinNote,
+  addTagToNote,
+  removeTagFromNote,
+  findNoteById,
 } from "./notes.repository";
 
-import { addTagToNote, removeTagFromNote } from "./notes.repository";
-import { findNoteById } from "./notes.repository";
 import { saveVersionService } from "../versions/versions.service";
+
+// 👇 ADD THIS LINE
+import { NoteModel } from "./notes.model";
 
 export async function createNoteService(userId: string, data: any) {
   return createNote({
@@ -24,7 +25,7 @@ export async function createNoteService(userId: string, data: any) {
   });
 }
 
-export async function getNotesService(userId: string, options: any) {
+export async function getNotesService(userId: string, options: any = {}) {
   const { search, tag, folder, page = 1, limit = 10 } = options;
 
   const query: any = {
@@ -49,13 +50,8 @@ export async function getNotesService(userId: string, options: any) {
 
   const skip = (page - 1) * limit;
 
-  return NoteModel.find(query)
-
-    .skip(skip)
-
-    .limit(limit)
-
-    .sort({ createdAt: -1 });
+  // ✅ Now NoteModel is defined!
+  return NoteModel.find(query).skip(skip).limit(limit).sort({ createdAt: -1 });
 }
 
 export async function updateNoteService(id: string, userId: string, data: any) {
@@ -89,7 +85,7 @@ export async function permanentDeleteService(id: string, userId: string) {
 export async function archiveNoteService(
   id: string,
   userId: string,
-  value: boolean,
+  value: boolean
 ) {
   return archiveNote(id, userId, value);
 }
@@ -97,7 +93,7 @@ export async function archiveNoteService(
 export async function pinNoteService(
   id: string,
   userId: string,
-  value: boolean,
+  value: boolean
 ) {
   return pinNote(id, userId, value);
 }
@@ -105,7 +101,7 @@ export async function pinNoteService(
 export async function addTagService(
   noteId: string,
   userId: string,
-  tagId: string,
+  tagId: string
 ) {
   return addTagToNote(noteId, userId, tagId);
 }
@@ -113,7 +109,7 @@ export async function addTagService(
 export async function removeTagService(
   noteId: string,
   userId: string,
-  tagId: string,
+  tagId: string
 ) {
   return removeTagFromNote(noteId, userId, tagId);
 }

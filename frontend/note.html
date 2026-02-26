@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <h1>Edit Note</h1>
+
+    <input id="title" />
+
+    <textarea id="content"></textarea>
+
+    <br />
+
+    <button onclick="save()">Save</button>
+
+    <script src="app.js"></script>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+
+      const id = params.get("id");
+
+      loadNote();
+
+      async function loadNote() {
+        const notes = await apiFetch("/notes");
+
+        const note = notes.find((n) => n._id === id);
+
+        document.getElementById("title").value = note.title;
+
+        document.getElementById("content").value = note.content || "";
+      }
+
+      async function save() {
+        const title = document.getElementById("title").value;
+
+        const content = document.getElementById("content").value;
+
+        await apiFetch(
+          `/notes/${id}`,
+
+          {
+            method: "PATCH",
+
+            body: JSON.stringify({
+              title,
+              content,
+            }),
+          },
+        );
+
+        alert("Saved");
+      }
+    </script>
+  </body>
+</html>
