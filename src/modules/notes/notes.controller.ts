@@ -1,0 +1,41 @@
+import { Response } from "express";
+import { AuthRequest } from "../../types/express";
+
+import {
+  createNoteService,
+  getNotesService,
+  updateNoteService,
+  deleteNoteService,
+} from "./notes.service";
+
+export async function createNote(req: AuthRequest, res: Response) {
+  const note = await createNoteService(req.userId!, req.body);
+
+  res.json(note);
+}
+
+export async function getNotes(req: AuthRequest, res: Response) {
+  const search = req.query.search as string;
+
+  const page = Number(req.query.page) || 1;
+
+  const limit = Number(req.query.limit) || 10;
+
+  const notes = await getNotesService(req.userId!, search, page, limit);
+
+  res.json(notes);
+}
+
+export async function updateNote(req: AuthRequest, res: Response) {
+  const note = await updateNoteService(req.params.id, req.userId!, req.body);
+
+  res.json(note);
+}
+
+export async function deleteNote(req: AuthRequest, res: Response) {
+  await deleteNoteService(req.params.id, req.userId!);
+
+  res.json({
+    success: true,
+  });
+}

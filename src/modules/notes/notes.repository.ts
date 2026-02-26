@@ -45,5 +45,8 @@ export async function softDeleteNote(
     id: string,
     userId: string
 ) {
-    
+    return NoteModel.findByIdAndUpdate(
+        { _id: id, userId },
+        { isDeleted: true }
+    );
 }
